@@ -15,4 +15,5 @@ Americas.</string>
 freshwater lake.</string>
     <string name="next_button">Next</string>
     <string name="prev_button">Prev</string>
+    <string name="result_message">Правильных ответов: %1$d из %2$d</string>
 </resources>

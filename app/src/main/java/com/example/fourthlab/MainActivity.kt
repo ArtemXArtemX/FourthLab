@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     )
 
     private var currentIndex = 0
+    private var correctAnswersCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             currentIndex = savedInstanceState.getInt(
                 "currentIndex",
                 0
-            ) // Восстанавливаем индекс текущего вопроса
+            )
         }
 
         trueButton = findViewById(R.id.true_button)
@@ -66,16 +67,13 @@ class MainActivity : AppCompatActivity() {
         nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
             updateQuestion()
-            enableAnswerButtons()
+            enableAnswerButtons() // Делаем кнопки активными для следующего вопроса
 
+            // Если это последний вопрос, показываем результат и делаем кнопку Next неактивной
             if (currentIndex == questionBank.size - 1) {
                 nextButton.isEnabled = false
                 nextButton.visibility = View.INVISIBLE
-            }
-
-            if (currentIndex == questionBank.size - 1) {
-                nextButton.isEnabled = false
-                nextButton.visibility = View.INVISIBLE
+                showResult() // Показать результат после последнего вопроса
             }
         }
 
@@ -122,13 +120,13 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = questionBank[currentIndex].answer
         val messageResId = if (userAnswer == correctAnswer) {
+            correctAnswersCount++ // Увеличиваем счетчик правильных ответов
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
-
     private fun disableAnswerButtons() {
         trueButton.isEnabled = false
         falseButton.isEnabled = false
@@ -142,13 +140,19 @@ class MainActivity : AppCompatActivity() {
         trueButton.alpha = 1.0f
         falseButton.alpha = 1.0f
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d(TAG, "onSaveInstanceState called")
         outState.putInt("currentIndex", currentIndex)
-
         }
+
+    private fun showResult() {
+        val resultMessage = getString(R.string.result_message, correctAnswersCount, questionBank.size)
+        Toast.makeText(this, resultMessage, Toast.LENGTH_LONG).show()
     }
+}
+
 
 
 
