@@ -39,7 +39,10 @@ class MainActivity : AppCompatActivity() {
 
         // Восстанавливаем состояние, если оно было сохранено
         if (savedInstanceState != null) {
-            currentIndex = savedInstanceState.getInt("currentIndex", 0) // Восстанавливаем индекс текущего вопроса
+            currentIndex = savedInstanceState.getInt(
+                "currentIndex",
+                0
+            ) // Восстанавливаем индекс текущего вопроса
         }
 
         trueButton = findViewById(R.id.true_button)
@@ -52,15 +55,18 @@ class MainActivity : AppCompatActivity() {
 
         trueButton.setOnClickListener {
             checkAnswer(true)
+            disableAnswerButtons()
         }
 
         falseButton.setOnClickListener {
             checkAnswer(false)
+            disableAnswerButtons()
         }
 
         nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
             updateQuestion()
+            enableAnswerButtons()
         }
 
         prevButton.setOnClickListener {
@@ -77,10 +83,12 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         Log.d(TAG, "onStart() called")
     }
+
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume() called")
     }
+
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause() called")
@@ -90,6 +98,7 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         Log.d(TAG, "onStop() called")
     }
+
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy() called")
@@ -110,10 +119,27 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 
+    private fun disableAnswerButtons() {
+        trueButton.isEnabled = false
+        falseButton.isEnabled = false
+        trueButton.alpha = 0.5f
+        falseButton.alpha = 0.5f
+    }
+
+    private fun enableAnswerButtons() {
+        trueButton.isEnabled = true
+        falseButton.isEnabled = true
+        trueButton.alpha = 1.0f
+        falseButton.alpha = 1.0f
+    }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d(TAG, "onSaveInstanceState called")
-        outState.putInt("currentIndex", currentIndex) // Сохраняем индекс текущего вопроса
+        outState.putInt("currentIndex", currentIndex)
+
+        }
     }
 
-}
+
+
+
