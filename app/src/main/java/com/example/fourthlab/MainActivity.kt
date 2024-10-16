@@ -3,6 +3,7 @@ package com.example.fourthlab
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
-    private lateinit var nextButton: Button
+    private lateinit var nextButton: ImageButton
+    private lateinit var prevButton: ImageButton
     private lateinit var questionTextView: TextView
 
     private val questionBank = listOf(
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true)
     )
+
     private var currentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,39 +33,42 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Инициализация кнопок и текстового поля
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
+        prevButton = findViewById(R.id.prev_button)
         questionTextView = findViewById(R.id.question_text_view)
 
-        // Обновляем вопрос
         updateQuestion()
 
-        // Слушатель для кнопки "True"
-        trueButton.setOnClickListener { view: View ->
+        trueButton.setOnClickListener {
             checkAnswer(true)
         }
 
-        // Слушатель для кнопки "False"
-        falseButton.setOnClickListener { view: View ->
+        falseButton.setOnClickListener {
             checkAnswer(false)
         }
 
-        // Слушатель для кнопки "Next"
         nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
             updateQuestion()
         }
+
+        prevButton.setOnClickListener {
+            currentIndex = if (currentIndex == 0) {
+                questionBank.size - 1 // Переход на последний вопрос, если индекс равен 0
+            } else {
+                currentIndex - 1
+            }
+            updateQuestion()
+        }
     }
 
-    // Метод для обновления вопроса
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
 
-    // Метод для проверки ответа
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = questionBank[currentIndex].answer
         val messageResId = if (userAnswer == correctAnswer) {
