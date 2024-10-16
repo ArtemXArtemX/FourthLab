@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,8 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="24dp"
-        android:text="@string/question_text"
-        android:textSize="20sp" />
+        tools:text="@string/question_australia"
+        android:textSize="20sp"
+        android:gravity="center" />
 
     <!-- Горизонтальный LinearLayout для кнопок -->
     <LinearLayout
@@ -35,5 +37,11 @@
             android:text="@string/false_button" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next_button" />
 
 </LinearLayout>
