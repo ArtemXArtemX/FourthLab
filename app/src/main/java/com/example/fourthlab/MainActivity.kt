@@ -67,6 +67,16 @@ class MainActivity : AppCompatActivity() {
             currentIndex = (currentIndex + 1) % questionBank.size
             updateQuestion()
             enableAnswerButtons()
+
+            if (currentIndex == questionBank.size - 1) {
+                nextButton.isEnabled = false
+                nextButton.visibility = View.INVISIBLE
+            }
+
+            if (currentIndex == questionBank.size - 1) {
+                nextButton.isEnabled = false
+                nextButton.visibility = View.INVISIBLE
+            }
         }
 
         prevButton.setOnClickListener {
