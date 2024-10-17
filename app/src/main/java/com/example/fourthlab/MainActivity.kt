@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
 
@@ -38,13 +39,16 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
-        // Восстанавливаем состояние, если оно было сохранено
         if (savedInstanceState != null) {
             currentIndex = savedInstanceState.getInt(
                 "currentIndex",
                 0
             )
         }
+
+        val provider: ViewModelProvider = ViewModelProviders.of(this)
+        val quizViewModel = provider.get(QuizViewModel::class.java)
+        Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -67,13 +71,12 @@ class MainActivity : AppCompatActivity() {
         nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
             updateQuestion()
-            enableAnswerButtons() // Делаем кнопки активными для следующего вопроса
+            enableAnswerButtons()
 
-            // Если это последний вопрос, показываем результат и делаем кнопку Next неактивной
             if (currentIndex == questionBank.size - 1) {
                 nextButton.isEnabled = false
                 nextButton.visibility = View.INVISIBLE
-                showResult() // Показать результат после последнего вопроса
+                showResult()
             }
         }
 
@@ -120,7 +123,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = questionBank[currentIndex].answer
         val messageResId = if (userAnswer == correctAnswer) {
-            correctAnswersCount++ // Увеличиваем счетчик правильных ответов
+            correctAnswersCount++
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
