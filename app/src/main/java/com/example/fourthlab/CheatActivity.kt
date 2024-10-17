@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Context
+import android.os.Build
+
 
 class CheatActivity : AppCompatActivity() {
 
@@ -18,6 +20,10 @@ class CheatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cheat)
+
+        val apiLevelTextView: TextView = findViewById(R.id.api_level_text_view)
+        val apiLevel = Build.VERSION.SDK_INT
+        apiLevelTextView.text = "API Level: $apiLevel"
 
         answerTextView = findViewById(R.id.answer_text_view)
         showAnswerButton = findViewById(R.id.show_answer_button)
