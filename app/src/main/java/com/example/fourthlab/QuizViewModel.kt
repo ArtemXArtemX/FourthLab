@@ -1,5 +1,8 @@
 package com.example.fourthlab
 
+import androidx.lifecycle.ViewModel
+import android.util.Log
+
 private const val TAG = "QuizViewModel"
 class QuizViewModel : ViewModel() {
     init {

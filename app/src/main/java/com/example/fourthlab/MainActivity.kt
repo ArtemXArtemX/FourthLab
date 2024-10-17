@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 
 private const val TAG = "MainActivity"
 
@@ -46,8 +46,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        val provider: ViewModelProvider = ViewModelProviders.of(this)
-        val quizViewModel = provider.get(QuizViewModel::class.java)
+        val quizViewModel = ViewModelProvider(this).get(QuizViewModel::class.java)
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         trueButton = findViewById(R.id.true_button)
