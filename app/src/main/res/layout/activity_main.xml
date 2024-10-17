@@ -40,6 +40,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal">>
 
+        <Button
+            android:id="@+id/cheat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/cheat_button" />
+
         <ImageButton
             android:id="@+id/prev_button"
             android:layout_width="wrap_content"
