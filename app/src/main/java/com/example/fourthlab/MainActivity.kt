@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
-const val EXTRA_ANSWER_SHOWN = "com.example.fourthlab.answer_shown" // Define the constant here
+const val EXTRA_ANSWER_SHOWN = "com.example.fourthlab.answer_shown"
 
 data class Question(val textResId: Int, val answer: Boolean)
 
@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prevButton: ImageButton
     private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
+    private lateinit var hintTextView: TextView
+    private lateinit var answerTextView: TextView
 
     private var correctAnswersCount = 0
     private lateinit var cheatActivityLauncher: ActivityResultLauncher<Intent>
@@ -52,20 +54,24 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
-        cheatActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                quizViewModel.isCheater = result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
-            }
-        }
-
+        // Инициализация элементов
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
         prevButton = findViewById(R.id.prev_button)
         cheatButton = findViewById(R.id.cheat_button)
         questionTextView = findViewById(R.id.question_text_view)
+        hintTextView = findViewById(R.id.hint_text_view)
+        answerTextView = findViewById(R.id.answer_text_view)
+
+        cheatActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                quizViewModel.isCheater = result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+            }
+        }
 
         updateQuestion()
+        updateHintText()
 
         trueButton.setOnClickListener {
             checkAnswer(true)
@@ -89,6 +95,7 @@ class MainActivity : AppCompatActivity() {
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
             cheatActivityLauncher.launch(intent)
+            useHint()
         }
 
         nextButton.setOnClickListener {
@@ -108,12 +115,42 @@ class MainActivity : AppCompatActivity() {
         questionTextView.setText(questionTextResId)
     }
 
+    private fun updateHintText() {
+        hintTextView.text = "Осталось подсказок: ${quizViewModel.remainingHints}"
+        if (quizViewModel.remainingHints <= 0) {
+            cheatButton.isEnabled = false
+            cheatButton.alpha = 0.5f
+        } else {
+            cheatButton.isEnabled = true
+            cheatButton.alpha = 1.0f
+        }
+    }
+
+    private fun useHint() {
+        if (quizViewModel.remainingHints > 0) {
+            quizViewModel.remainingHints--
+            updateHintText()
+
+            correctAnswersCount = 0
+            quizViewModel.isCheater = true
+
+            val correctAnswer = quizViewModel.currentQuestionAnswer
+            answerTextView.text = if (correctAnswer) {
+                getString(R.string.true_button)
+            } else {
+                getString(R.string.false_button)
+            }
+        }
+    }
+
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = quizViewModel.currentQuestionAnswer
         val messageResId = when {
-            quizViewModel.isCheater -> R.string.judgment_toast
+            quizViewModel.isCheater -> {
+                R.string.judgment_toast
+            }
             userAnswer == correctAnswer -> {
-                correctAnswersCount++ // Увеличиваем счетчик правильных ответов
+                correctAnswersCount++
                 R.string.correct_toast
             }
             else -> R.string.incorrect_toast

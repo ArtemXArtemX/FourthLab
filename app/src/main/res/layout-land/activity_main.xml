@@ -4,14 +4,12 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Внешний вертикальный LinearLayout для центрирования элементов -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
 
-        <!-- Вопрос (TextView), по центру сверху -->
         <TextView
             android:id="@+id/question_text_view"
             android:layout_width="wrap_content"
@@ -21,7 +19,6 @@
             android:textSize="20sp"
             android:gravity="center" />
 
-        <!-- Горизонтальный LinearLayout для кнопок True/False -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,14 +26,12 @@
             android:gravity="center"
             android:layout_marginTop="16dp">
 
-            <!-- Кнопка True -->
             <Button
                 android:id="@+id/true_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/true_button" />
 
-            <!-- Кнопка False -->
             <Button
                 android:id="@+id/false_button"
                 android:layout_width="wrap_content"
@@ -44,6 +39,22 @@
                 android:text="@string/false_button"
                 android:layout_marginStart="16dp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/answer_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/hint_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Осталось подсказок: 3"
+            android:visibility="visible"/>
 
         <Button
             android:id="@+id/cheat_button"
@@ -59,7 +70,6 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
-            <!-- Updated ImageButton for prev_button -->
             <ImageButton
                 android:id="@+id/prev_button"
                 android:layout_width="48dp"
@@ -69,7 +79,6 @@
                 android:layout_marginEnd="16dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
-            <!-- Updated ImageButton for next_button -->
             <ImageButton
                 android:id="@+id/next_button"
                 android:layout_width="48dp"

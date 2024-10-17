@@ -33,8 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Назад"
-        android:layout_marginTop="16dp"/> <!-- Отступ для улучшения внешнего вида -->
-
+        android:layout_marginTop="16dp"/>
     <TextView
         android:id="@+id/api_level_text_view"
         android:layout_width="wrap_content"
