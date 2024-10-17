@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
+const val EXTRA_ANSWER_SHOWN = "com.example.fourthlab.answer_shown" // Define the constant here
 
 data class Question(val textResId: Int, val answer: Boolean)
 
@@ -36,7 +37,6 @@ class MainActivity : AppCompatActivity() {
     private var correctAnswersCount = 0
     private lateinit var cheatActivityLauncher: ActivityResultLauncher<Intent>
 
-    // Define the questionBank list
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -52,19 +52,17 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
-        // Register the ActivityResultLauncher
         cheatActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 quizViewModel.isCheater = result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
             }
         }
 
-        // Initialize UI elements
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
         prevButton = findViewById(R.id.prev_button)
-        cheatButton = findViewById(R.id.cheat_button) // Инициализация кнопки Cheat
+        cheatButton = findViewById(R.id.cheat_button)
         questionTextView = findViewById(R.id.question_text_view)
 
         updateQuestion()
@@ -90,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         cheatButton.setOnClickListener {
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            cheatActivityLauncher.launch(intent) // Используем новый API для запуска активности
+            cheatActivityLauncher.launch(intent)
         }
 
         nextButton.setOnClickListener {
